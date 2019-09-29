@@ -38,9 +38,40 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    // write your solution here
+    let array = expr.match(/(.{1,10})/g);                                               //divide by length 10
+    for(let element of array) {
+        array[array.indexOf(element)] = parseInt(element)
+                                            .toString()                                 //to delete zeros at the beginning
+                                            .match(/(.{1,2})/g)                         //divide by pairs
+                                            .map(value => {
+                                                if(value === '10')
+                                                    return '.'
+                                                else if (value === '11')
+                                                    return '-'
+                                                else  {
+                                                    return '+'                          //replace 'Na' and 'N' with "+"
+                                                }
+                                            })                                          //change pairs to '.' or '-'
+                                            .join('');                                  //join pairs together 
+    }
+
+    //to Change symbols to single Word or ++ to space ' '
+    for (let element in array){
+        for(let key in MORSE_TABLE){
+            if(array[element] === key)
+                array[element] = MORSE_TABLE[key]
+            else if (array[element] === '++')
+                array[element] = ' '
+
+            
+        }
+    }                              
+    //Join Words into sentence and return it
+    return array.join('');
 }
 
 module.exports = {
     decode
 }
+
+
